@@ -1,0 +1,1 @@
+/usr/bin/cc  -g   CMakeFiles/gamedevascii.dir/main.o  -o gamedevascii -rdynamic 
