@@ -1,7 +1,0 @@
-/home/nalleyer_inoru/projects/GameDevAscii/build/CMakeFiles/edit_cache.dir
-/home/nalleyer_inoru/projects/GameDevAscii/build/CMakeFiles/list_install_components.dir
-/home/nalleyer_inoru/projects/GameDevAscii/build/CMakeFiles/install.dir
-/home/nalleyer_inoru/projects/GameDevAscii/build/CMakeFiles/install/local.dir
-/home/nalleyer_inoru/projects/GameDevAscii/build/CMakeFiles/install/strip.dir
-/home/nalleyer_inoru/projects/GameDevAscii/build/CMakeFiles/rebuild_cache.dir
-/home/nalleyer_inoru/projects/GameDevAscii/build/CMakeFiles/gamedevascii.dir
