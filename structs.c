@@ -78,6 +78,8 @@ void checkTimeEvents(Company * company)
     
 }
 
+/* in-loop func
+ */
 void doProject(Company * company)
 {
 }

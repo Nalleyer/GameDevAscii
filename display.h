@@ -8,6 +8,7 @@
 #include <ncurses.h>
 #include "structs.h"
 #include "structs.c"
+#include "globalVars.h"
 
 WINDOW * createWin(int height, int width, int startX, int startY)
 { 
@@ -19,31 +20,116 @@ WINDOW * createWin(int height, int width, int startX, int startY)
     return local_win;
 }
 
+typedef struct WinPara
+{
+    int _height;
+    int _width;
+    int _startX;
+    int _startY;
+}WinPara;
 
 typedef struct DisplayWins
 {
-    WINDOW * mainWin;
-    WINDOW * subWin;
-    WINDOW * infoWin;
+    WINDOW * _mainWin;
+    WinPara _mainWinPara;
+    WINDOW * _infoWin;
+    WinPara _infoWinPara;
 }DisplayWins;
 
 DisplayWins * createDisplayWins()
 {
     DisplayWins * pDisWin = (DisplayWins *)malloc( sizeof(DisplayWins) );
-    pDisWin -> mainWin = createWin(9,20,5,0);
-    pDisWin -> infoWin = createWin(LINES / 4 , COLS -1, LINES - LINES / 4, 0);
-    /* print main menu */
-    mvwprintw(pDisWin->mainWin,1,3,"projects(p)");
-    mvwprintw(pDisWin->mainWin,2,3,"stuff(s)");
-    mvwprintw(pDisWin->mainWin,3,3,"actions(a)");
-    mvwprintw(pDisWin->mainWin,4,3,"information(i)");
-    mvwprintw(pDisWin->mainWin,5,3,"system(y)");
+    WinPara mainP = {LINES / 2, 30, 5, 0};
+    pDisWin -> _mainWin = createWin(LINES / 2,30,5,0);
+    pDisWin -> _mainWinPara = mainP;
+    WinPara infoP = {LINES / 4, COLS - 1, LINES - LINES / 4, 0};
+    pDisWin -> _infoWin = createWin(LINES / 4 , COLS -1, LINES - LINES / 4, 0);
+    pDisWin -> _infoWinPara = infoP;
     
+    //printMainMenu(pDisWin);
     
-    wrefresh(pDisWin->mainWin);
     return pDisWin;
 }
 
+void printMainMenu(DisplayWins *disWin)
+{
+    /* print main menu */
+    mvwprintw(disWin ->_mainWin,1,3,"projects(p)");
+    mvwprintw(disWin ->_mainWin,2,3,"stuff(s)");
+    mvwprintw(disWin ->_mainWin,3,3,"actions(a)");
+    mvwprintw(disWin ->_mainWin,4,3,"information(i)");
+    mvwprintw(disWin ->_mainWin,5,3,"system(y)");
+    
+    
+    wrefresh(disWin ->_mainWin);
+}
+
+void printProjectMenu(DisplayWins * disWin)
+{
+    mvwprintw(disWin -> _mainWin, 1, 3, "new game(n)");
+    mvwprintw(disWin -> _mainWin, 2, 3, "contract(c)");
+    mvwprintw(disWin -> _mainWin, 3, 3, "back(b)");
+    wrefresh(disWin -> _mainWin);
+}
+
+void printStuffMenu(DisplayWins * disWin)
+{
+    mvwprintw(disWin -> _mainWin, 1, 3, "hire(h)");
+    mvwprintw(disWin -> _mainWin, 2, 3, "filr(f)");
+    mvwprintw(disWin -> _mainWin, 3, 3, "train(t)");
+    mvwprintw(disWin -> _mainWin, 4, 3, "back(b)");
+    wrefresh(disWin -> _mainWin);
+}
+
+void printActionMenu(DisplayWins * disWin)
+{
+    mvwprintw(disWin -> _mainWin, 1, 3, "advertise(a)");
+    mvwprintw(disWin -> _mainWin, 2, 3, "back(b)");
+    wrefresh(disWin -> _mainWin);
+}
+
+void printInformationMenu(DisplayWins * disWin)
+{
+    
+}
+
+void printSystemMenu(DisplayWins * disWin)
+{
+    
+}
+
+void printPlatformMenu(DisplayWins * disWin)
+{
+    //mvwprintw(disWin -> _mainWin, 1, 3, "a");
+    for ( int i = 0; i < LENPLATFORMLIST; ++ i )
+    {
+        mvwprintw(disWin -> _mainWin, i + 1, 3, "%s(%d)\tmoney:%5d",platformlist[i]._name,i+1,platformlist[i]._money);
+    }
+    wrefresh(disWin -> _mainWin);
+}
+
+
+void clearMainWin(DisplayWins * disWin)
+{
+    for ( int x = 0 ; x < disWin -> _mainWinPara._height; ++ x)
+        for ( int y = 0 ; y < disWin -> _mainWinPara._width; ++ y )
+        {
+            mvwaddch(disWin->_mainWin,x,y,' ');
+        }
+    box(disWin->_mainWin,0,0);
+    wrefresh(disWin->_mainWin);
+}
+
+void clearInfoWin(DisplayWins * disWin)
+{
+    for ( int x = 0; x < disWin -> _infoWinPara._height; ++ x)
+        for ( int y = 0; y < disWin -> _infoWinPara._width; ++ y )
+        {
+            mvwaddch(disWin->_infoWin,x,y,' ');
+        }
+    box(disWin->_mainWin,0,0);
+    wrefresh(disWin->_infoWin);
+}
 
 void refreshGlobalDisplay(Company * company)
 {

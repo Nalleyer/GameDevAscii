@@ -4,6 +4,7 @@
 
 #include "structs.h"
 
+#define LENPLATFORMLIST 4
 const GamePlatform platformlist[] = {
     {"PC",100},
     {"MES",8000},
@@ -11,7 +12,9 @@ const GamePlatform platformlist[] = {
     {"Play Gear",10500}
 };
 
-const Ad adList[5] = {
+
+#define LENADLIST 5
+const Ad adList[] = {
     {"magazine",5,300},
     {"online",9,500},
     {"broadcast",15,800},
@@ -20,6 +23,7 @@ const Ad adList[5] = {
 };
 
 
+#define LENTHEMELIST 6
 const GameTheme themeList[] = {
     {"desktop",200},
     {"action",1200},
@@ -29,6 +33,8 @@ const GameTheme themeList[] = {
     {"askAnswer",300}
 };
 
+
+#define LENTYPELIST 11
 const GameType typelist[] = {
     {"naruto",365},
     {"mestery",380},
