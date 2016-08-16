@@ -167,10 +167,10 @@ void increasemoney ( Company * company)
 	z = moneyType(company -> _nowProject -> _gametype);
 }
 
-/* create a project
+/* create a game project
  * paras, all are char *,
  */
-Project * createProject(char * name, char * platform, char * theme, char * type, int timeLimit)
+Project * createGameProject(char * name, char * platform, char * theme, char * type)
 {
     Project * pj = (Project *) malloc ( sizeof ( Project ) );
     pj ->_platform = platform;
@@ -181,6 +181,12 @@ Project * createProject(char * name, char * platform, char * theme, char * type,
     pj -> _numBugs = 0;
     pj -> _process = 0;
     pj -> _selledCopies = 0;
+    
+    pj -> _isGame = TRUE;
+    
+    /* game has no reward nor timelimit */
+    pj -> _reward = -1;
+    pj -> _timeLimit = -1;
     
     return pj;
 }
@@ -261,7 +267,7 @@ void startNewGame(DisplayWins * disWin,Company * company, int indexPlatform, int
     if ( money <= (company -> _money) )
     /* enough, make it */
     {
-        company -> _nowProject = createProject("gameName",indexPlatform, indexTheme, indexType, -1);
+        company -> _nowProject = createGameProject("gameName",indexPlatform, indexTheme, indexType);
         company -> _isDoingProject = true;
         /* decrease money */
         company -> _money -= money;
@@ -275,7 +281,7 @@ void startNewGame(DisplayWins * disWin,Company * company, int indexPlatform, int
 }
 
 /* create a random project for choosing */
-Project * createRandomProject()
+Project * createRandomContractProject()
 {
     
 }
@@ -285,7 +291,7 @@ void startContract(DisplayWins * menu, Company * company, Project * project)
     
 }
 
-Stuff * createRandomStuff()
+Stuff * createRandomStuff(int indexWay)
 {
     
 }
@@ -300,7 +306,7 @@ void train(DisplayWins * menu, Stuff * stuff)
     
 }
 
-void fire(DisplayWins * menu, Company * company, Stuff * sutff)
+void fire(DisplayWins * menu, Company * company, int indexStuff)
 {
     
 }
@@ -310,12 +316,23 @@ void useAd(DisplayWins * menu, Company * company, int indexAd)
     
 }
 
+/* if money is enough, decrease money, and return true;
+ * else return false
+ */
+BOOL makeAFind(Company * company, int indexWay)
+{
+    
+}
+
 void processMenu(DisplayWins * menu, char ** menuState, const Company * company)
 {
     char nowInput;
     int indexPlatform = -1;
     int indexTheme = -1;
-    int indexType = -1;
+    /*used to save generated contracts*/
+    Project * contractList[NUMCONTRACTCHOOSE];
+    /*used to save generated stuff*/
+    Stuff * stuffList[NUMSTUFFCHOOSE];
     while (nowInput = getch())
     {
         /* esc ignore state */
@@ -393,6 +410,12 @@ void processMenu(DisplayWins * menu, char ** menuState, const Company * company)
                 {
                     (* menuState) = "main_pj_contract";
                     clearMainMenu(menu);
+                    /* generate contracts */
+                    for ( int i = 0; i < NUMCONTRACTCHOOSE; ++ i)
+                    {
+                        contractList[i] = createRandomContractProject();
+                    }
+                    printChooseContractMenu(menu,contractList,NUMCONTRACTCHOOSE);
                     break;
                 }
                 /*back*/
@@ -416,12 +439,21 @@ void processMenu(DisplayWins * menu, char ** menuState, const Company * company)
                 {
                     (* menuState) = "main_stuff_hire";
                     clearMainMenu(menu);
+                    printWayToFindMenu(menu);
                     break;
                 }
                 case 'f' :
                 {
                     (* menuState) = "main_stuff_fire";
                     clearMainMenu(menu);
+                    printChooseStuffFireMenu(menu,company);
+                    break;
+                }
+                case 't' :
+                {
+                    (* menuState) = "main_stuff_train";
+                    clearMainMenu(menu);
+                    printChooseStuffTrainMenu(menu,company);
                     break;
                 }
                 case 'b' :
@@ -436,7 +468,19 @@ void processMenu(DisplayWins * menu, char ** menuState, const Company * company)
             }
         }
         else if ( (* menuState) == "sub_action" )
-        {}
+        {
+            switch(nowInput)
+            {
+                case 'a' :
+                {
+                    (* menuState) = "sub_action_ad";
+                    clearMainMenu(menu);
+                    printAdMenu(menu);
+                }
+                default: 
+                    break;
+            }
+        }
         else if ( (* menuState) == "main_pj_platform" )
         {
             if ( nowInput == 'b' )
@@ -490,14 +534,79 @@ void processMenu(DisplayWins * menu, char ** menuState, const Company * company)
             if ( 0 <= tmpIndex && tmpIndex < LENTYPELIST)
             {
                 (* menuState) = "exit";
-                indexType= tmpIndex;
                 clearMainMenu(menu);
                 /* call func: start a new game */
-                startNewGame(menu,company, indexPlatform, indexTheme, indexType);
+                startNewGame(menu,company, indexPlatform, indexTheme, tmpIndex);
                 return;
             }
             else
                 continue;
+        }
+        else if ( (* menuState) == "main_pj_contract" ) 
+        {
+            if ( nowInput == 'b' )
+            {
+                (* menuState) = "main_pj";
+                clearMainMenu(menu);
+                printProjectMenu(menu);
+                continue;
+            }
+            int tmpIndex = nowInput - '0' - 1;
+            if ( 0 <= tmpIndex && tmpIndex < NUMCONTRACTCHOOSE)
+            {
+                (* menuState) = "exit";
+                clearMainMenu(menu);
+                /* call func: start a contract*/
+                startContract(menu,company,contractList[tmpIndex]);
+                return;
+            }
+            else
+                continue;
+        }
+        else if ( (* menuState) == "main_stuff_hire" ) 
+        {
+            if ( nowInput == 'b' )
+            {
+                (* menuState) = "main_stuff";
+                clearMainMenu(menu);
+                printProjectMenu(menu);
+                continue;
+            }
+            int wayIndex = nowInput - '0' - 1;
+            /* decrease money */
+            if ( makeAFind(company,wayIndex) )
+            {
+                (* menuState) = "main_stuff_hire_way";
+                /* generate stuff for choosing */
+                for (int i = 0; i < NUMSTUFFCHOOSE; ++ i)
+                {
+                    stuffList[i] = createRandomStuff(wayIndex);
+                }
+            }
+            else
+            {
+                printInfo(menu,"you don't have enough money for that !");
+            }
+        }
+        else if ( (* menuState) == "main_stuff_hire_way" ) 
+        {
+            int newStuffIndex = nowInput - '0' - 1;
+            hire(menu,company,stuffList[newStuffIndex]);
+        }
+        else if ( (* menuState) == "main_stuff_fire" ) 
+        {
+            int fireStuffIndex = nowInput - '0' - 1;
+            fire(menu,company,fireStuffIndex);
+        }
+        else if ( (* menuState) == "main_stuff_train" ) 
+        {
+            int trainStuffIndex = nowInput - '0' - 1;
+            train(menu,company -> _stuffs[trainStuffIndex]);
+        }
+        else if ( (* menuState) == "sub_action_ad" ) 
+        {
+            int indexAd= nowInput - '0' - 1;
+            useAd(menu,company,indexAd);
         }
         mvprintw(22,20,"state: %s",*menuState);
     }

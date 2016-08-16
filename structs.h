@@ -71,14 +71,21 @@ typedef struct Stuff
 	 Property _property;
 }Stuff;
 
+typedef struct WayToFind
+{
+    char * _name;
+    int _money;
+}WayToFind;
 
 typedef struct Project
 {
+    BOOL _isGame;
 	char * _name;
 	char * _platform;
 	char * _gametype;
 	char * _gametheme;
     int _timeLimit;
+    int _reward;
 	int _numBugs;
 	int _process;
 	int _selledCopies;

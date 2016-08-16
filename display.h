@@ -74,6 +74,26 @@ void printProjectMenu(DisplayWins * disWin)
     wrefresh(disWin -> _mainWin);
 }
 
+void printChooseContractMenu(DisplayWins * disWin,Project * contractList, int len)
+{
+    int i = 0;
+    for ( ; i < len; ++ i )
+    {
+        Propertytwo tmpPt = contractList[i] . _property;
+        mvwprintw(disWin -> _mainWin, i + 1, 3, "%s,%s,%s,%s,\nreward:%d,timeLimit:%d\t(%d)",
+                  tmpPt._intrest,
+                  tmpPt._uniquation,
+                  tmpPt._eyes,
+                  tmpPt._musics,
+                  contractList[i] . _reward,
+                  contractList[i] . _timeLimit,
+                  i + 1
+                 );
+    }
+    mvwprintw(disWin -> _mainWin, i + 2, 3, "back(b)");
+    wrefresh(disWin -> _mainWin);
+}
+
 void printStuffMenu(DisplayWins * disWin)
 {
     mvwprintw(disWin -> _mainWin, 1, 3, "hire(h)");
@@ -101,6 +121,25 @@ void printSystemMenu(DisplayWins * disWin)
     
 }
 
+void printWayToFindMenu(DisplayWins * disWin)
+{
+    
+}
+
+void printChooseStuffFireMenu(DisplayWins * diswin,Company * company)
+{
+    
+}
+
+void printChooseStuffTrainMenu(DisplayWins * diswin,Company * company)
+{
+    
+}
+
+void printAdMenu(DisplayWins * disWin)
+{
+    
+}
 void printPlatformMenu(DisplayWins * disWin)
 {
     int i = 0;
