@@ -11,8 +11,11 @@ const GamePlatform platformlist[] = {
     {"Play Gear",10500}
 };
 
-const Ad adList[5] = {
-    {"magazine",5,300},
+#define LENADLIST 6
+
+const Ad adList[LENADLIST] = {
+	{"NULL",0,0},
+	{"magazine",5,300},
     {"online",9,500},
     {"broadcast",15,800},
     {"demo",30,1500},

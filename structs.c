@@ -1,6 +1,7 @@
 #ifndef _STRUCTS_C
 #define _STRUCTS_C
 #include "structs.h"
+#include "globalVars.h"
     
 char * getRandomName()
 {
@@ -82,4 +83,82 @@ void doProject(Company * company)
 {
 }
 
+int fansNum(Ad * ad)
+{
+	for ( int i = 0; i < LENADLIST; ++ i )
+	{
+		if ( adList[i]._name == ad -> _name )
+			return ( adList[i]._deltaFans );
+	}
+}
+
+int moneyNum(Ad * ad)
+{
+	for ( int j = 0;j < LENADLIST; ++ j )
+	{
+		if ( adList[j]._money == ad ->  -money )
+			return ( adList[i]._money );
+	}
+}
+
+void max(Propertytwo)
+{
+	int a = Propertytwo._intrest;
+		if(Propertytwo._uniquation >= a)
+		{
+			a=Propertytwo._uniquation;
+		    if(Propertytwo._musics >= a)
+			{
+				a=Propertytwo._musics;
+			    if(Propertytwo._eyes >= a)
+				{
+					a=Propertytwo._eyes;
+				}
+			}
+		}
+		return a;
+}
+
+void min(Propertytwo)
+{
+	int b = Propertytwo._intrest;
+		if(Propertytwo._uniquation <= b)
+		{
+			b=Propertytwo._uniquation;
+		    if(Propertytwo._musics <= b)
+			{
+				b=Propertytwo._musics;
+			    if(Propertytwo._eyes <= b)
+				{
+					b=Propertytwo._eyes;
+				}
+			}
+		}
+		return b;
+}
+
+int moneyTheme(GameTheme * theme)
+{
+	for ( int i = 0; i < LENADLIST2; ++ i )
+	{
+		if ( themeList[i]._themeName == theme -> _themeName )
+			return ( themeList[i]._themeName );
+	}
+}
+
+int moneyType(GameType * type)
+{
+	for ( int j = 0; j < LENADLIST3; ++ j )
+	{
+		if ( typeList[j]._typeName == type -> _typeName )
+			return ( typeList[j]._typeName );
+	}
+}
+
+void increasemoney ( Company * company)
+{
+	int x,y,z;
+	x = moneyNum();
+	y = moneyTheme(GameTheme * theme);
+	z = moneyType(GameType * type);
 #endif

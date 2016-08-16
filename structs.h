@@ -40,6 +40,14 @@ typedef struct Property
 	int _music;
 }Property;
 
+typedef struct Propertytwo
+{
+	int _intrest;
+	int _uniquation;
+	int _musics;
+	int _eyes;
+}Propertytwo;
+
 typedef enum enumStuffType
 {
     coder,
