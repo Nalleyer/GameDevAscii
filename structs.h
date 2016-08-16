@@ -40,6 +40,14 @@ typedef struct Property
 	int _music;
 }Property;
 
+typedef struct Propertytwo
+{
+	int _intrest;
+	int _uniquation;
+	int _musics;
+	int _eyes;
+}Propertytwo;
+
 typedef enum enumStuffType
 {
     coder,
@@ -67,12 +75,14 @@ typedef struct Stuff
 typedef struct Project
 {
 	char * _name;
-	char _platform;
-	char _gametype;
+	char * _platform;
+	char * _gametype;
 	char * _gametheme;
+    int _timeLimit;
 	int _numBugs;
 	int _process;
 	int _selledCopies;
+    Propertytwo _property;
 }Project;
 
 typedef struct Ad
@@ -99,10 +109,10 @@ typedef struct Company
 	BOOL _isDoingProject;
 	Project * _nowProject;
 	Stuff * _stuffs[MAXSTUFFNUM];
+    int _numStuff;
     Timer * _timer;
     /* if no ad now, _nowAd is 'null' */
     Ad * _nowAd;
-	int _numStuff;
     int _numResearch;
 	int _fans;
     int _money;

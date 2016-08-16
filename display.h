@@ -59,6 +59,8 @@ void printMainMenu(DisplayWins *disWin)
     mvwprintw(disWin ->_mainWin,3,3,"actions(a)");
     mvwprintw(disWin ->_mainWin,4,3,"information(i)");
     mvwprintw(disWin ->_mainWin,5,3,"system(y)");
+    mvwprintw(disWin ->_mainWin,7,3,"exit menu(e)");
+    
     
     
     wrefresh(disWin ->_mainWin);
@@ -68,7 +70,7 @@ void printProjectMenu(DisplayWins * disWin)
 {
     mvwprintw(disWin -> _mainWin, 1, 3, "new game(n)");
     mvwprintw(disWin -> _mainWin, 2, 3, "contract(c)");
-    mvwprintw(disWin -> _mainWin, 3, 3, "back(b)");
+    mvwprintw(disWin -> _mainWin, 4, 3, "back(b)");
     wrefresh(disWin -> _mainWin);
 }
 
@@ -77,17 +79,18 @@ void printStuffMenu(DisplayWins * disWin)
     mvwprintw(disWin -> _mainWin, 1, 3, "hire(h)");
     mvwprintw(disWin -> _mainWin, 2, 3, "filr(f)");
     mvwprintw(disWin -> _mainWin, 3, 3, "train(t)");
-    mvwprintw(disWin -> _mainWin, 4, 3, "back(b)");
+    mvwprintw(disWin -> _mainWin, 5, 3, "back(b)");
     wrefresh(disWin -> _mainWin);
 }
 
 void printActionMenu(DisplayWins * disWin)
 {
     mvwprintw(disWin -> _mainWin, 1, 3, "advertise(a)");
-    mvwprintw(disWin -> _mainWin, 2, 3, "back(b)");
+    mvwprintw(disWin -> _mainWin, 3, 3, "back(b)");
     wrefresh(disWin -> _mainWin);
 }
 
+/* information menu in main menu! */
 void printInformationMenu(DisplayWins * disWin)
 {
     
@@ -100,16 +103,48 @@ void printSystemMenu(DisplayWins * disWin)
 
 void printPlatformMenu(DisplayWins * disWin)
 {
-    //mvwprintw(disWin -> _mainWin, 1, 3, "a");
-    for ( int i = 0; i < LENPLATFORMLIST; ++ i )
+    int i = 0;
+    for ( ; i < LENPLATFORMLIST; ++ i )
     {
-        mvwprintw(disWin -> _mainWin, i + 1, 3, "%s(%d)\tmoney:%5d",platformlist[i]._name,i+1,platformlist[i]._money);
+        mvwprintw(disWin -> _mainWin, i + 1, 3, "%s(%c)\tmoney:%5d",
+                  platformlist[i]._name,
+                  '0' + i+1,
+                  platformlist[i]._money);
     }
+    mvwprintw(disWin -> _mainWin, i + 2, 3, "back(b)");
+    wrefresh(disWin -> _mainWin);
+}
+
+void printThemeMenu(DisplayWins * disWin)
+{   
+    int i = 0;
+    for ( ; i < LENTHEMELIST; ++ i )
+    {
+        mvwprintw(disWin -> _mainWin, i + 1, 3, "%s(%c)\tmoney:%5d",
+                  themeList[i]._themeName,
+                  '0' + i+1,
+                  themeList[i]._money);
+    }
+    mvwprintw(disWin -> _mainWin, i + 2, 3, "back(b)");
+    wrefresh(disWin -> _mainWin);
+}
+
+void printTypeMenu(DisplayWins * disWin)
+{
+    int i = 0;
+    for ( ; i < LENTYPELIST; ++ i )
+    {
+        mvwprintw(disWin -> _mainWin, i + 1, 3, "%s(%c)\tmoney:%5d",
+                  typeList[i]._typeName,
+                  '0' + i+1,
+                  typeList[i]._money);
+    }
+    mvwprintw(disWin -> _mainWin, i + 2, 3, "back(b)");
     wrefresh(disWin -> _mainWin);
 }
 
 
-void clearMainWin(DisplayWins * disWin)
+void clearMainMenu(DisplayWins * disWin)
 {
     for ( int x = 0 ; x < disWin -> _mainWinPara._height; ++ x)
         for ( int y = 0 ; y < disWin -> _mainWinPara._width; ++ y )
@@ -155,7 +190,16 @@ void updateDisplay(Company * company)
              company -> _timer -> _month + 1,
              company -> _timer -> _week + 1
     );
+    
     refresh();
+}
+
+void printInfo(DisplayWins * disWin, char * str)
+{
+    clearInfoWin(disWin);
+    mvwprintw(disWin -> _infoWin, 1,1,"%s",str);
+    box(disWin -> _infoWin,0,0);
+    wrefresh(disWin -> _infoWin);
 }
 
 #endif

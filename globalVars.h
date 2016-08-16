@@ -4,6 +4,8 @@
 
 #include "structs.h"
 
+#define INITMONEY 2000
+
 #define LENPLATFORMLIST 4
 const GamePlatform platformlist[] = {
     {"PC",100},
@@ -12,10 +14,10 @@ const GamePlatform platformlist[] = {
     {"Play Gear",10500}
 };
 
-
-#define LENADLIST 5
-const Ad adList[] = {
-    {"magazine",5,300},
+#define LENADLIST 6
+const Ad adList[LENADLIST] = {
+	{"NULL",0,0},
+	{"magazine",5,300},
     {"online",9,500},
     {"broadcast",15,800},
     {"demo",30,1500},
@@ -35,7 +37,7 @@ const GameTheme themeList[] = {
 
 
 #define LENTYPELIST 11
-const GameType typelist[] = {
+const GameType typeList[] = {
     {"naruto",365},
     {"mestery",380},
     {"chess",155},
