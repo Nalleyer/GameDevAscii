@@ -22,8 +22,9 @@ const Ad adList[LENADLIST] = {
     {"TVad",70,3500}
 };
 
+#define LENADLIST2 6
 
-const GameTheme themeList[] = {
+const GameTheme themeList[LENADLIST2] = {
     {"desktop",200},
     {"action",1200},
     {"advanture",500},
@@ -32,7 +33,9 @@ const GameTheme themeList[] = {
     {"askAnswer",300}
 };
 
-const GameType typelist[] = {
+#define LENADLIST3 11
+
+const GameType typeList[LENADLIST3] = {
     {"naruto",365},
     {"mestery",380},
     {"chess",155},

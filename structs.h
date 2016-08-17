@@ -16,7 +16,7 @@ typedef int BOOL;
 #endif
 
 typedef struct GamePlatform
-{
+{;
     char * _name;
     int _money;
 }GamePlatform;
@@ -77,7 +77,7 @@ typedef struct Project
 	char * _name;
 	char _platform;
 	char _gametype;
-	char * _gametheme;
+	char _gametheme;
 	int _numBugs;
 	int _process;
 	int _selledCopies;
