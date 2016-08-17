@@ -39,8 +39,8 @@ typedef struct DisplayWins
 DisplayWins * createDisplayWins()
 {
     DisplayWins * pDisWin = (DisplayWins *)malloc( sizeof(DisplayWins) );
-    WinPara mainP = {LINES / 2, 30, 5, 0};
-    pDisWin -> _mainWin = createWin(LINES / 2,30,5,0);
+    WinPara mainP = {LINES / 2, 100, 5, 0};
+    pDisWin -> _mainWin = createWin(LINES / 2,100,5,0);
     pDisWin -> _mainWinPara = mainP;
     WinPara infoP = {LINES / 4, COLS - 1, LINES - LINES / 4, 0};
     pDisWin -> _infoWin = createWin(LINES / 4 , COLS -1, LINES - LINES / 4, 0);
@@ -74,19 +74,20 @@ void printProjectMenu(DisplayWins * disWin)
     wrefresh(disWin -> _mainWin);
 }
 
-void printChooseContractMenu(DisplayWins * disWin,Project * contractList, int len)
+void printChooseContractMenu(DisplayWins * disWin, Project * *contractList, int len)
 {
     int i = 0;
     for ( ; i < len; ++ i )
     {
-        Propertytwo tmpPt = contractList[i] . _property;
-        mvwprintw(disWin -> _mainWin, i + 1, 3, "%s,%s,%s,%s,\nmoney:%d,reward:%d,\t(%d)",
+        Project * tmpPj = contractList[i];
+        Propertytwo tmpPt = tmpPj -> _property;
+        mvwprintw(disWin -> _mainWin, i + 1, 3, "%d,%d,%d,%d, money:%d,reward:%d (%d)",
                   tmpPt._intrest,
                   tmpPt._uniquation,
                   tmpPt._eyes,
                   tmpPt._musics,
-                  contractList[i] . _money,
-                  contractList[i] . _reward,
+                  tmpPj -> _money,
+                  tmpPj -> _reward,
                   i + 1
                  );
     }
@@ -131,6 +132,21 @@ void printChooseStuffFireMenu(DisplayWins * diswin,Company * company)
     
 }
 
+
+void printTrainWayMenu(DisplayWins * disWin)
+{
+    int i = 0;
+    for ( ; i < LENWAYTRAINLIST; ++ i )
+    {
+        mvwprintw(disWin -> _mainWin, i + 1, 3, "%s\tmoney:%d(%d)",
+                  wayTrainList[i]._name,
+                  wayTrainList[i]._money,
+                  '0' + i + 1);
+    }
+    mvwprintw(disWin -> _mainWin, i + 2, 3, "back(b)");
+    wrefresh(disWin -> _mainWin);
+}
+
 void printChooseStuffTrainMenu(DisplayWins * disWin,Company * company)
 {
     int i = 0;
@@ -144,10 +160,31 @@ void printChooseStuffTrainMenu(DisplayWins * disWin,Company * company)
     wrefresh(disWin -> _mainWin);
 }
 
+void printChooseStuffHireMenu(DisplayWins * disWin, Stuff ** stuffList)
+{
+    int i = 0;
+    for (; i < NUMSTUFFCHOOSE; ++ i)
+    {
+        Stuff * s = stuffList[i];
+        mvwprintw(disWin -> _mainWin, i + 1, 3, "%s,(coding:%d,writing:%d,drawing:%d,music:%d)\tmoney:%d(%d)",
+            s -> _name,
+            s -> _property ._coding,
+            s -> _property._writing,
+            s -> _property._drawing,
+            s -> _property._music,
+            s -> _salery,
+            i + 1
+        );
+    }
+    mvwprintw(disWin -> _mainWin, i + 2, 3, "back(b)");
+    wrefresh(disWin -> _mainWin);
+}
+
 void printAdMenu(DisplayWins * disWin)
 {
     
 }
+
 void printPlatformMenu(DisplayWins * disWin)
 {
     int i = 0;
@@ -224,9 +261,33 @@ void refreshGlobalDisplay(Company * company)
              company -> _timer -> _week + 1
     );
     mvprintw(2,0,"fans: %d", company -> _fans );
-    mvprintw(0,COLS / 2 - 15, "woking on: NULL");
-    mvprintw(1,COLS / 2 - 15, "bugs: 0");
-    mvprintw(2,COLS / 2 - 15, "research: %d", company -> _numResearch);
+    if ( company -> _isDoingProject)
+    {
+        mvprintw(0,COLS / 2 - 15, "woking on: %s",
+            company -> _nowProject -> _name
+        );
+        mvprintw(1,COLS / 2 - 15, "bugs: %d",
+            company -> _nowProject -> _numBugs
+        );
+        mvprintw(2,COLS / 2 - 15, "research: %d",
+            company -> _numResearch
+        );
+        mvprintw(3,COLS / 2 - 15, "process: %d",
+            company -> _nowProject -> _process
+        );
+        mvprintw(0, COLS - COLS / 4,"intrest: %s",
+            company -> _nowProject -> _property . _intrest
+        );
+        mvprintw(0, COLS - COLS / 4,"unic: %s",
+            company -> _nowProject -> _property . _uniquation
+        );
+    }
+    else
+    {
+        mvprintw(0,COLS / 2 - 15, "no project now");
+    }
+    
+    
 }
 
 void updateDisplay(Company * company)
@@ -237,7 +298,7 @@ void updateDisplay(Company * company)
              company -> _timer -> _month + 1,
              company -> _timer -> _week + 1
     );
-    
+    refreshGlobalDisplay(company);
     refresh();
 }
 

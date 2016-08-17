@@ -54,22 +54,6 @@ typedef struct Propertytwo
 	int _eyes;
 }Propertytwo;
 
-typedef enum enumStuffType
-{
-    coder,
-    writer,
-    painter,
-    musician,
-    avarage
-}enumStuffType;
-
-Property getRandomProperty(enumStuffType stuffType)
-{
-    //tmp
-    Property p;
-    return p;
-}
-
 typedef struct Stuff
 {
 	 char * _name;
@@ -126,6 +110,8 @@ typedef struct Company
 	Stuff * _stuffs[MAXSTUFFNUM];
     int _numStuff;
     Timer * _timer;
+	/*you can sell game for'sellDay'*/
+	int  _sellDay;
     /* if no ad now, _nowAd is 'null' */
     Ad * _nowAd;
     int _numResearch;

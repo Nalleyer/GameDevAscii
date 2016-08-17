@@ -10,6 +10,7 @@
 
 #define LENPLATFORMLIST 4
 #define GAMETIME 140
+#define SELLDAY 100
 
 const GamePlatform platformlist[] = {
     {"PC",100},
@@ -61,10 +62,11 @@ const GameType typeList[] = {
 #define LENWAYFINDLIST 4
 const WayToFind wayFindList[] = 
 {
-	{"
+	{"promoteWay",500},
+	{"magazineWay",2000},
 };
 
-#define LENWAYTRAIN 7
+#define LENWAYTRAINLIST 7
 const WayToTrain wayTrainList[] = 
 {
     //{"book",300,{1,1,0.0}},

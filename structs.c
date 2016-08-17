@@ -75,12 +75,30 @@ Company * createCompany()
     pCompany -> _isSellingGame = FALSE;
     /* first stuff */
     pCompany -> _numStuff = 1;
-    pCompany -> _stuffs[0] = createStuff(getRandomName(),1, getRandomProperty(avarage));
+    Property tmpProperty = {10,10,10,10};
+    pCompany -> _stuffs[0] = createStuff(getRandomName(),1, tmpProperty );
     return pCompany;
 }
-void checkTimeEvents(Company * company)
+
+void checkTimeEvents(DisplayWins * disWin, Company * company)
 {
-    
+    if ( company -> _timer -> _month == 4 && company -> _timer -> _week == 0 && company -> _timer -> _day == 0)
+    {
+        for ( int i = 0; i < company -> _numStuff; ++ i )
+        {
+            company -> _money -= company -> _stuffs[i] -> _salery;
+        }
+    }
+}
+
+void checkBreak(DisplayWins * disWin, Company * company)
+{
+    if ( company -> _money < 0 )
+    {
+        printInfo(disWin,"you have broken down! press any key to exit game.");
+        getch();
+        exit(0);
+    }
 }
 
 /* in-loop func
@@ -114,7 +132,10 @@ void doProject(Company * company)
 
 void sellGame(Company * company)
 {
-    
+	increasemoney(company);
+	company->_sellDay = company->_sellDay - 1;
+	if ( company->_sellDay == 0)
+		company -> _isSellingGame = FALSE;
 }
 
 int fansNum(Ad * ad)
@@ -557,6 +578,8 @@ void finishGame(DisplayWins * disWin,Company * company)
 	++ company -> _lenGameHistory;
     company -> _nowProject = NULL;
     company -> _isSellingGame = TRUE;
+    /* reset time */
+    company -> _sellDay = SELLDAY;
     printInfo(disWin,"you have finished your new game, it'll be selling now");
 }
 
@@ -588,7 +611,7 @@ void updateCompany(DisplayWins * disWin,Company * company)
 {
     /* update timer */
     addDay(company -> _timer);
-    checkTimeEvents(company);
+    checkTimeEvents(disWin,company);
     
     /* project */
     if ( company -> _isDoingProject )
@@ -694,6 +717,13 @@ void startNewGame(DisplayWins * disWin,Company * company, int indexPlatform, int
 /* create a random project for choosing */
 Project * createRandomContractProject()
 {
+   Project * p = ( Project * ) malloc ( sizeof ( Project ) );
+   Propertytwo tmpProperty = { rand() % 100, rand() % 100, rand() % 100, rand() % 100 };
+   p -> _property = tmpProperty;
+   p -> _name = 'A' + rand()%26;
+   p -> _money = rand()%1000+1000;
+   p -> _reward = rand()%2000+1000;
+   return p;
 }
 
 void startContract(DisplayWins * menu, Company * company, Project * project)
@@ -724,19 +754,50 @@ void hire(DisplayWins * menu, Company * company, Stuff * stuff)
     printInfo(menu,"you have hired a new stuff~");
 }
 
-void train(DisplayWins * menu, Stuff * stuff, int indexTrainWay)
+/* check money */
+void train(DisplayWins * menu, Company * company ,Stuff * stuff, int indexTrainWay)
 {
-    
+    if ( company -> _money >= wayTrainList[indexTrainWay]._money)
+    /* enough money */
+    {
+        company -> _money -= wayTrainList[indexTrainWay]._money;
+        /* train */
+        Property * p = &(stuff -> _property);
+        Property deltaP = wayTrainList[indexTrainWay]._property;
+        p -> _coding += deltaP._coding;
+        p -> _drawing += deltaP._drawing;
+        p -> _music += deltaP._music;
+        p -> _writing += deltaP._writing;
+    }
+    else
+    {
+        printInfo(menu,"you don't have enough money.");
+    }
 }
 
 void fire(DisplayWins * menu, Company * company, int indexStuff)
 {
-    
+    free(company -> _stuffs[indexStuff]);
+    for (int i = indexStuff; i < company -> _numStuff; ++ i)
+    {
+        company -> _stuffs[i] = company -> _stuffs[i + 1];
+    }
+    -- company -> _numStuff;
+    printInfo(menu,"you have fired a stuff.");
 }
 
 void useAd(DisplayWins * menu, Company * company, int indexAd)
 {
-    
+    if ( company -> _money > adList[indexAd]._money )
+    {
+        company -> _money -= adList[indexAd]._money ; 
+        company -> _fans += adList[indexAd]._deltaFans;
+        printInfo(menu,"you have used an ad, your fans have increased.");
+    }
+    else
+    {
+        printInfo(menu,"you don't have enough money.");
+    }
 }
 
 /* if money is enough, decrease money, and return true;
@@ -747,13 +808,14 @@ BOOL makeAFind(Company * company, int indexWay)
     
 }
 
-void freeOtherContracts(Project * contractList,int tmpIndex)
+void freeOtherContracts(Project ** contractList,int tmpIndex)
 {
     for ( int i = 0; i < NUMCONTRACTCHOOSE; ++ i )
     {
+        Project * toFreePj = contractList[i];
         if ( i != tmpIndex )
         {
-            free(contractList[i]);
+            free(toFreePj);
         }
     }
 }
@@ -903,13 +965,13 @@ void processMenu(DisplayWins * menu, char ** menuState, const Company * company)
                     break;
             }
         }
-        else if ( (* menuState) == "sub_action" )
+        else if ( (* menuState) == "main_action" )
         {
             switch(nowInput)
             {
                 case 'a' :
                 {
-                    (* menuState) = "sub_action_ad";
+                    (* menuState) = "main_action_ad";
                     clearMainMenu(menu);
                     printAdMenu(menu);
                 }
@@ -994,7 +1056,7 @@ void processMenu(DisplayWins * menu, char ** menuState, const Company * company)
                 clearMainMenu(menu);
                 /* call func: start a contract*/
                 startContract(menu,company,contractList[tmpIndex]);
-                freeOtherContracts(contractList,tmpIndex);
+                freeOtherContracts(&contractList,tmpIndex);
                 return;
             }
             else
@@ -1019,6 +1081,8 @@ void processMenu(DisplayWins * menu, char ** menuState, const Company * company)
                 {
                     stuffList[i] = createRandomStuff(wayIndex);
                 }
+                clearMainMenu(menu);
+                printChooseStuffHireMenu(menu,&stuffList);
             }
             else
             {
@@ -1052,10 +1116,23 @@ void processMenu(DisplayWins * menu, char ** menuState, const Company * company)
                 printTrainWayMenu(menu);
             }
         }
-        else if ( (* menuState) == "sub_action_ad" ) 
+        else if ( (* menuState) == "main_action_ad" ) 
         {
+            if ( nowInput == 'b' )
+            {
+                (* menuState) = "main_action";
+                clearMainMenu(menu);
+                printActionMenu(menu);
+                continue;
+            }
             int indexAd= nowInput - '0' - 1;
-            useAd(menu,company,indexAd);
+            if (indexAd > 0 && indexAd < LENADLIST)
+            {
+                /* check money inside */
+                (* menuState) = "exit";
+                clearMainMenu(menu);
+                useAd(menu,company,indexAd);
+            }
         }
         else if ( (* menuState) == "main_stuff_train_stuff" ) 
         {
@@ -1066,9 +1143,16 @@ void processMenu(DisplayWins * menu, char ** menuState, const Company * company)
                 printChooseStuffTrainMenu(menu, company);
                 continue;
             }
+            int tmpIndex = nowInput - '0' - 1;
             /* choose train way */
-            (* menuState) = "exit";
-            train(menu,company -> _stuffs[stuffToTrainIndex],nowInput - '0' - 1);
+            if ( tmpIndex > 0 && tmpIndex < LENWAYTRAINLIST )
+            {
+                (* menuState) = "exit";
+                /* check money in func*/
+                clearMainMenu(menu);
+                train(menu,company,company -> _stuffs[stuffToTrainIndex],tmpIndex);
+                return;
+            }
         }
         mvprintw(22,20,"state: %s",*menuState);
     }
