@@ -679,7 +679,7 @@ Project * createRandomContractProject()
    Project * p = ( Project * ) malloc ( sizeof ( Project ) );
    p -> project ->_name = 'A' + rand()%26;
    p -> project ->_money = rand()%1000+1000;
-   p -> project ->_reward = rand()%2000+1000;
+   p -> project ->_reward = rand()%1000+2000;
 }
 
 void startContract(DisplayWins * menu, Company * company, Project * project)
@@ -687,9 +687,13 @@ void startContract(DisplayWins * menu, Company * company, Project * project)
     
 }
 
-Stuff * createRandomStuff(int indexWay)
+Stuff * createRandomStuff(int indexWay)/*Stuff * createStuff(char * name, int salery, Property property)*/
 {
-    
+	char * name = 'a'+rand()%26;
+	int salery = wayFindList[indexWay]._money + rand()%100+10;
+    int average = salery/40;
+	Property property = { rand()%7+(average-2), rand()%8+(average-2),rand()%5+(average-2) ,rand()%5+(average-2); };
+    return createStuff(name, salery, property);
 }
 
 void hire(DisplayWins * menu, Company * company, Stuff * stuff)
