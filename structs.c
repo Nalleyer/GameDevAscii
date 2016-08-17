@@ -552,6 +552,7 @@ void finishGame(DisplayWins * disWin,Company * company)
 {
     company -> _isDoingProject = FALSE;
     company -> _gameHistory[company -> _lenGameHistory] = company -> _nowProject;
+	++ company -> _lenGameHistory;
     company -> _nowProject = NULL;
     company -> _isSellingGame = TRUE;
     printInfo(disWin,"you have finished your new game, it'll be selling now");
