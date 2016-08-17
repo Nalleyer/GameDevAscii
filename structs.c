@@ -3,6 +3,7 @@
 #include "structs.h"
 #include "globalVars.h"
 #include "display.h"
+#include <unistd.h>
     
 char * getRandomName()
 {
@@ -134,7 +135,7 @@ int moneyAd(Ad * ad)
 	}
 }
 
-void max(Propertytwo * pt)
+int max(const Propertytwo * pt)
 {
 	int a = pt -> _intrest;
 		if(pt -> _uniquation >= a)
@@ -149,10 +150,10 @@ void max(Propertytwo * pt)
 				}
 			}
 		}
-		return a;
+	return a;
 }
 
-void min(Propertytwo * pt)
+int min(const Propertytwo * pt)
 {
 	int b = pt -> _intrest;
 		if(pt -> _uniquation <= b)
@@ -167,7 +168,7 @@ void min(Propertytwo * pt)
 				}
 			}
 		}
-		return b;
+	return b;
 }
 
 int moneyTheme(GameTheme * theme)
@@ -188,337 +189,337 @@ int moneyType(GameType * type)
 	}
 }
 
-void increasemoney ( Company * company)
+void increasemoney( Company * company)
 {
-	int x,y,z,sum,max,min,fansNum;
-	x = moneyAd( Company -> Project ->  _money );
-	y = moneyTheme( Company -> Project ->  _themeName );
-	z = moneyType( Company -> Project ->  _typeName );
-	max = max(Propertytwo);
-	min = min(Propertytwo);
-	fans = fansNum( Company -> Project ->  _deltaFans );
+	int x,y,z,sum,maxMoney,minMoney;
+	x = moneyAd( company -> _nowAd );
+	y = moneyTheme( company -> _nowProject -> _gametheme);
+	z = moneyType( company -> _nowProject ->  _gametype);
+	maxMoney = max(&(company -> _nowProject -> _property));
+	minMoney = min(&(company -> _nowProject -> _property));
+	int fans = company -> _fans;
 	sum = x + y + z;
 	if(0<=sum<850)
 	{
-		if(0<=max<30&&0<=fans<100)
+		if(0<=maxMoney<30&&0<=fans<100)
 		{
-			if(max - min >10)
+			if(maxMoney - minMoney >10)
 			{
 				if(fans > 70)
-				    money+= rand()%118+82;
+				    company -> _money += rand()%118+82;
 			    else
-				    money+= rand()%96+64;
+				    company -> _money+= rand()%96+64;
 			}
 			else
 			{
 				if(fans > 66)
-					money+= rand()%120+84;
+					company -> _money+= rand()%120+84;
 				else
-					money+= rand()%98+66;
+					company -> _money+= rand()%98+66;
 			}
 		}
-		if(30<=max<60&&100<=fans<200)
+		if(30<=maxMoney<60&&100<=fans<200)
 		{
-			if(max - min >15)
+			if(maxMoney - minMoney >15)
 			{
 				if(fans >160)
-					money+= rand()%260+340;
+					company -> _money+= rand()%260+340;
 			    else
-					money+= rand()%225+315;
+					company -> _money+= rand()%225+315;
 			}
 			else
 			{
 				if(fans >150)
-					money+= rand()%265+345;
+					company -> _money+= rand()%265+345;
 			    else
-					money+= rand()%240+330;
+					company -> _money+= rand()%240+330;
 			}
 		}
-		if(60<=max<100&&200<=fans<300)
+		if(60<=maxMoney<100&&200<=fans<300)
 		{
-			if(max - min >20)
+			if(maxMoney - minMoney >20)
 			{
 				if(fans >265)
-					money+= rand()%420+520;
+					company -> _money+= rand()%420+520;
 			    else
-					money+= rand()%380+400;
+					company -> _money+= rand()%380+400;
 			}
 			else
 			{
 				if(fans >240)
-					money+= rand()%425+526;
+					company -> _money+= rand()%425+526;
 			    else
-					money+= rand()%385+407;
+					company -> _money+= rand()%385+407;
 			}
 		}
 	}
 	else if(850<=sum<1050)
 			{
-		if(0<=max<30&&0<=fans<100)
+		if(0<=maxMoney<30&&0<=fans<100)
 		{
-			if(max - min >10)
+			if(maxMoney - minMoney >10)
 			{
 				if(fans > 70)
-				    money+= rand()%129+93;
+				    company -> _money+= rand()%129+93;
 			    else
-				    money+= rand()%108+75;
+				    company -> _money+= rand()%108+75;
 			}
 			else
 			{
 				if(fans > 66)
-					money+= rand()%131+95;
+					company -> _money+= rand()%131+95;
 				else
-					money+= rand()%109+77;
+					company -> _money+= rand()%109+77;
 			}
 		}
-		if(30<=max<60&&100<=fans<200)
+		if(30<=maxMoney<60&&100<=fans<200)
 		{
-			if(max - min >15)
+			if(maxMoney - minMoney >15)
 			{
 				if(fans >160)
-					money+= rand()%282+362;
+					company -> _money+= rand()%282+362;
 			    else
-					money+= rand()%247+337;
+					company -> _money+= rand()%247+337;
 			}
 			else
 			{
 				if(fans >150)
-					money+= rand()%287+355;
+					company -> _money+= rand()%287+355;
 			    else
-					money+= rand()%262+330;
+					company -> _money+= rand()%262+330;
 			}
 		}
-		if(60<=max<100&&200<=fans<300)
+		if(60<=maxMoney<100&&200<=fans<300)
 		{
-			if(max - min >20)
+			if(maxMoney - minMoney >20)
 			{
 				if(fans >265)
-					money+= rand()%442+542;
+					company -> _money+= rand()%442+542;
 			    else
-					money+= rand()%400+421;
+					company -> _money+= rand()%400+421;
 			}
 			else
 			{
 				if(fans >240)
-					money+= rand()%447+548;
+					company -> _money+= rand()%447+548;
 			    else
-					money+= rand()%405+431;
+					company -> _money+= rand()%405+431;
 			}
 		}
 	}
 	else if(1050<=sum<1350)
 	{
-		if(0<=max<30&&0<=fans<100)
+		if(0<=maxMoney<30&&0<=fans<100)
 		{
-			if(max - min >12)
+			if(maxMoney - minMoney >12)
 			{
 				if(fans > 70)
-				    money+= rand()%154+118;
+				    company -> _money+= rand()%154+118;
 			    else
-				    money+= rand()%133+100;
+				    company -> _money+= rand()%133+100;
 			}
 			else
 			{
 				if(fans > 66)
-					money+= rand()%156+120;
+					company -> _money+= rand()%156+120;
 				else
-					money+= rand()%134+102;
+					company -> _money+= rand()%134+102;
 			}
 		}
-		if(30<=max<60&&100<=fans<200)
+		if(30<=maxMoney<60&&100<=fans<200)
 		{
-			if(max - min >15)
+			if(maxMoney - minMoney >15)
 			{
 				if(fans >160)
-					money+= rand()%307+387;
+					company -> _money+= rand()%307+387;
 			    else
-					money+= rand()%272+362;
+					company -> _money+= rand()%272+362;
 			}
 			else
 			{
 				if(fans >150)
-					money+= rand()%302+380;
+					company -> _money+= rand()%302+380;
 			    else
-					money+= rand()%287+355;
+					company -> _money+= rand()%287+355;
 			}
 		}
-		if(60<=max<100&&200<=fans<300)
+		if(60<=maxMoney<100&&200<=fans<300)
 		{
-			if(max - min >20)
+			if(maxMoney - minMoney >20)
 			{
 				if(fans >265)
-					money+= rand()%467+567;
+					company -> _money+= rand()%467+567;
 			    else
-					money+= rand()%425+446;
+					company -> _money+= rand()%425+446;
 			}
 			else
 			{
 				if(fans >240)
-					money+= rand()%472+573;
+					company -> _money+= rand()%472+573;
 			    else
-					money+= rand()%430+456;
+					company -> _money+= rand()%430+456;
 			}
 		}
 	}
 	else if(1350<=sum<1750)
 	{
-		if(0<=max<30&&0<=fans<100)
+		if(0<=maxMoney<30&&0<=fans<100)
 		{
-			if(max - min >12)
+			if(maxMoney - minMoney >12)
 			{
 				if(fans > 70)
-				    money+= rand()%204+168;
+				    company -> _money+= rand()%204+168;
 			    else
-				    money+= rand()%182+150;
+				    company -> _money+= rand()%182+150;
 			}
 			else
 			{
 				if(fans > 66)
-					money+= rand()%206+170;
+					company -> _money+= rand()%206+170;
 				else
-					money+= rand()%184+152;
+					company -> _money+= rand()%184+152;
 			}
 		}
-		if(30<=max<60&&100<=fans<200)
+		if(30<=maxMoney<60&&100<=fans<200)
 		{
-			if(max - min >15)
+			if(maxMoney - minMoney >15)
 			{
 				if(fans >160)
-					money+= rand()%357+437;
+					company -> _money+= rand()%357+437;
 			    else
-					money+= rand()%322+412;
+					company -> _money+= rand()%322+412;
 			}
 			else
 			{
 				if(fans >150)
-					money+= rand()%352+420;
+					company -> _money+= rand()%352+420;
 			    else
-					money+= rand()%337+405;
+					company -> _money+= rand()%337+405;
 			}
 		}
-		if(60<=max<100&&200<=fans<300)
+		if(60<=maxMoney<100&&200<=fans<300)
 		{
-			if(max - min >20)
+			if(maxMoney - minMoney >20)
 			{
 				if(fans >265)
-					money+= rand()%517+617;
+					company -> _money+= rand()%517+617;
 			    else
-					money+= rand()%475+496;
+					company -> _money+= rand()%475+496;
 			}
 			else
 			{
 				if(fans >240)
-					money+= rand()%522+623;
+					company -> _money+= rand()%522+623;
 			    else
-					money+= rand()%480+506;
+					company -> _money+= rand()%480+506;
 			}
 		}
 	}
 	else if(1750<=sum<2000)
 	{
-		if(0<=max<30&&0<=fans<100)
+		if(0<=maxMoney<30&&0<=fans<100)
 		{
-			if(max - min >12)
+			if(maxMoney - minMoney >12)
 			{
 				if(fans > 70)
-				    money+= rand()%304+268;
+				    company -> _money+= rand()%304+268;
 			    else
-				    money+= rand()%282+250;
+				    company -> _money+= rand()%282+250;
 			}
 			else
 			{
 				if(fans > 66)
-					money+= rand()%306+270;
+					company -> _money+= rand()%306+270;
 				else
-					money+= rand()%284+252;
+					company -> _money+= rand()%284+252;
 			}
 		}
-		if(30<=max<60&&100<=fans<200)
+		if(30<=maxMoney<60&&100<=fans<200)
 		{
-			if(max - min >15)
+			if(maxMoney - minMoney >15)
 			{
 				if(fans >160)
-					money+= rand()%457+537;
+					company -> _money+= rand()%457+537;
 			    else
-					money+= rand()%422+512;
+					company -> _money+= rand()%422+512;
 			}
 			else
 			{
 				if(fans >150)
-					money+= rand()%452+520;
+					company -> _money+= rand()%452+520;
 			    else
-					money+= rand()%437+505;
+					company -> _money+= rand()%437+505;
 			}
 		}
-		if(60<=max<100&&200<=fans<300)
+		if(60<=maxMoney<100&&200<=fans<300)
 		{
-			if(max - min >20)
+			if(maxMoney - minMoney >20)
 			{
 				if(fans >265)
-					money+= rand()%617+717;
+					company -> _money+= rand()%617+717;
 			    else
-					money+= rand()%575+596;
+					company -> _money+= rand()%575+596;
 			}
 			else
 			{
 				if(fans >240)
-					money+= rand()%622+523;
+					company -> _money+= rand()%622+523;
 			    else
-					money+= rand()%580+606;
+					company -> _money+= rand()%580+606;
 			}
 		}
 	}
 	else if(sum>=2000)
 	{
-		if(0<=max<30&&0<=fans<100)
+		if(0<=maxMoney<30&&0<=fans<100)
 		{
-			if(max - min >12)
+			if(maxMoney - minMoney >12)
 			{
 				if(fans > 70)
-				    money+= rand()%304+268;
+				    company -> _money+= rand()%304+268;
 			    else
-				    money+= rand()%282+250;
+				    company -> _money+= rand()%282+250;
 			}
 			else
 			{
 				if(fans > 66)
-					money+= rand()%306+270;
+					company -> _money+= rand()%306+270;
 				else
-					money+= rand()%284+252;
+					company -> _money+= rand()%284+252;
 			}
 		}
-		if(30<=max<60&&100<=fans<200)
+		if(30<=maxMoney<60&&100<=fans<200)
 		{
-			if(max - min >15)
+			if(maxMoney - minMoney >15)
 			{
 				if(fans >160)
-					money+= rand()%457+537;
+					company -> _money+= rand()%457+537;
 			    else
-					money+= rand()%422+512;
+					company -> _money+= rand()%422+512;
 			}
 			else
 			{
 				if(fans >150)
-					money+= rand()%452+520;
+					company -> _money+= rand()%452+520;
 			    else
-					money+= rand()%437+505;
+					company -> _money+= rand()%437+505;
 			}
 		}
-		if(60<=max<100&&200<=fans<300)
+		if(60<=maxMoney<100&&200<=fans<300)
 		{
-			if(max - min >20)
+			if(maxMoney - minMoney >20)
 			{
 				if(fans >265)
-					money+= rand()%617+717;
+					company -> _money+= rand()%617+717;
 			    else
-					money+= rand()%575+596;
+					company -> _money+= rand()%575+596;
 			}
 			else
 			{
 				if(fans >240)
-					money+= rand()%622+723;
+					company -> _money+= rand()%622+723;
 			    else
-					money+= rand()%580+606;
+					company -> _money+= rand()%580+606;
 			}
 		}
 	}
@@ -544,6 +545,7 @@ Project * createGameProject(char * name, char * platform, char * theme, char * t
     
     /* game has no reward nor timelimit */
     pj -> _reward = -1;
+    pj -> _money = 0;
     
     return pj;
 }
@@ -569,6 +571,19 @@ void finishContract(DisplayWins * disWin,Company *  company)
     printInfo(disWin,"you have finished a contract, reward have added to your company");
 }
 
+
+void debugGame(Company * company)
+{
+    int tmpNumBugs = rand() % 5;
+    int * numBug = &(company -> _nowProject -> _numBugs);
+    if ( *numBug > 0 )
+    {
+        *numBug -= tmpNumBugs;
+        if ( *numBug < 0 )
+            *numBug = 0;
+    }
+}
+
 void updateCompany(DisplayWins * disWin,Company * company)
 {
     /* update timer */
@@ -582,7 +597,13 @@ void updateCompany(DisplayWins * disWin,Company * company)
         if ( company -> _nowProject ->_process >= 100 )
         {
             if ( company -> _nowProject -> _isGame)
-                finishGame(disWin,company);
+            {
+                debugGame(company);
+                if (company -> _nowProject ->_numBugs == 0)
+                {
+                    finishGame(disWin,company);
+                }
+            }
             else
                 finishContract(disWin,company);
         }
@@ -673,12 +694,22 @@ void startNewGame(DisplayWins * disWin,Company * company, int indexPlatform, int
 /* create a random project for choosing */
 Project * createRandomContractProject()
 {
-    
 }
 
 void startContract(DisplayWins * menu, Company * company, Project * project)
 {
-    
+    int cMoney = project -> _money;
+    if ( company -> _money >= cMoney )
+    {
+        company -> _money -= cMoney;
+        company -> _isDoingProject = TRUE;
+        company -> _nowProject = project;
+        printInfo(menu,"you have started a contract.");
+    }
+    else
+    {
+        printInfo(menu,"you don't have enough money.");
+    }
 }
 
 Stuff * createRandomStuff(int indexWay)
@@ -688,10 +719,12 @@ Stuff * createRandomStuff(int indexWay)
 
 void hire(DisplayWins * menu, Company * company, Stuff * stuff)
 {
-    
+    company -> _stuffs[company -> _numStuff] = stuff;
+    ++ company -> _numStuff;
+    printInfo(menu,"you have hired a new stuff~");
 }
 
-void train(DisplayWins * menu, Stuff * stuff)
+void train(DisplayWins * menu, Stuff * stuff, int indexTrainWay)
 {
     
 }
@@ -714,6 +747,17 @@ BOOL makeAFind(Company * company, int indexWay)
     
 }
 
+void freeOtherContracts(Project * contractList,int tmpIndex)
+{
+    for ( int i = 0; i < NUMCONTRACTCHOOSE; ++ i )
+    {
+        if ( i != tmpIndex )
+        {
+            free(contractList[i]);
+        }
+    }
+}
+
 void processMenu(DisplayWins * menu, char ** menuState, const Company * company)
 {
     char nowInput;
@@ -723,6 +767,8 @@ void processMenu(DisplayWins * menu, char ** menuState, const Company * company)
     Project * contractList[NUMCONTRACTCHOOSE];
     /*used to save generated stuff*/
     Stuff * stuffList[NUMSTUFFCHOOSE];
+    
+    int stuffToTrainIndex = -1;
     while (nowInput = getch())
     {
         /* esc ignore state */
@@ -948,6 +994,7 @@ void processMenu(DisplayWins * menu, char ** menuState, const Company * company)
                 clearMainMenu(menu);
                 /* call func: start a contract*/
                 startContract(menu,company,contractList[tmpIndex]);
+                freeOtherContracts(contractList,tmpIndex);
                 return;
             }
             else
@@ -990,13 +1037,38 @@ void processMenu(DisplayWins * menu, char ** menuState, const Company * company)
         }
         else if ( (* menuState) == "main_stuff_train" ) 
         {
-            int trainStuffIndex = nowInput - '0' - 1;
-            train(menu,company -> _stuffs[trainStuffIndex]);
+             if ( nowInput == 'b' )
+            {
+                (* menuState) = "main_stuff";
+                clearMainMenu(menu);
+                printProjectMenu(menu);
+                continue;
+            }
+            /* choose train way */
+            stuffToTrainIndex = nowInput - '0' - 1;
+            if ( stuffToTrainIndex > 0 && stuffToTrainIndex < company -> _numStuff )
+            {
+                (* menuState) = "main_stuff_train_stuff";
+                printTrainWayMenu(menu);
+            }
         }
         else if ( (* menuState) == "sub_action_ad" ) 
         {
             int indexAd= nowInput - '0' - 1;
             useAd(menu,company,indexAd);
+        }
+        else if ( (* menuState) == "main_stuff_train_stuff" ) 
+        {
+             if ( nowInput == 'b' )
+            {
+                (* menuState) = "main_stuff_train";
+                clearMainMenu(menu);
+                printChooseStuffTrainMenu(menu, company);
+                continue;
+            }
+            /* choose train way */
+            (* menuState) = "exit";
+            train(menu,company -> _stuffs[stuffToTrainIndex],nowInput - '0' - 1);
         }
         mvprintw(22,20,"state: %s",*menuState);
     }

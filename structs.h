@@ -90,6 +90,8 @@ typedef struct Project
 	char * _platform;
 	char * _gametype;
 	char * _gametheme;
+    /* if is a contract, it has money */
+    int _money;
     int _reward;
 	int _numBugs;
 	float _process;

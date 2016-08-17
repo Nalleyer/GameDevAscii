@@ -2,7 +2,6 @@
 #include "structs.h"
 #include "structs.c"
 #include "display.h"
-#include <unistd.h>
 #include <time.h>
 #include <pthread.h>
 
