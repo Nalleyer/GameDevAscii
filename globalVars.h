@@ -4,6 +4,12 @@
 
 #include "structs.h"
 
+#define INITMONEY 2000
+#define NUMCONTRACTCHOOSE 4
+#define NUMSTUFFCHOOSE 3
+
+#define LENPLATFORMLIST 4
+
 const GamePlatform platformlist[] = {
     {"PC",100},
     {"MES",8000},
@@ -12,7 +18,6 @@ const GamePlatform platformlist[] = {
 };
 
 #define LENADLIST 6
-
 const Ad adList[LENADLIST] = {
 	{"NULL",0,0},
 	{"magazine",5,300},
@@ -24,7 +29,9 @@ const Ad adList[LENADLIST] = {
 
 #define LENADLIST2 6
 
-const GameTheme themeList[LENADLIST2] = {
+
+#define LENTHEMELIST 6
+const GameTheme themeList[] = {
     {"desktop",200},
     {"action",1200},
     {"advanture",500},
@@ -33,9 +40,9 @@ const GameTheme themeList[LENADLIST2] = {
     {"askAnswer",300}
 };
 
-#define LENADLIST3 11
 
-const GameType typeList[LENADLIST3] = {
+#define LENTYPELIST 11
+const GameType typeList[] = {
     {"naruto",365},
     {"mestery",380},
     {"chess",155},
@@ -47,6 +54,13 @@ const GameType typeList[LENADLIST3] = {
     {"robot",250},
     {"history",425},
     {"art",700}
+};
+
+//set to 4 temply
+#define LENWAYFINDLIST 4
+const WayToFind wayFindList[] = 
+{
+    
 };
 
 #endif

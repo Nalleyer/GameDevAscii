@@ -7,37 +7,6 @@
 #include <pthread.h>
 
 
-void updateCompany(Company * company)
-{
-    /* update timer */
-    addDay(company -> _timer);
-    checkTimeEvents(company);
-    
-    /* project */
-    if ( company -> _isDoingProject )
-    {
-        doProject(company);
-    }
-}
-
-
-void gameLoop(Company * company)
-{
-    /*main loop*/
-    while (true)
-    {
-        updateCompany(company);
-        updateDisplay(company);
-        /* sleep */
-        int counter = 0;
-        for (counter = 0; counter < 50; ++ counter)
-        {
-            
-            usleep(10000);
-        }
-    }
-}
-
 int main(int argc, char *argv[]) {
     /* init curses */
     initscr();
@@ -47,8 +16,6 @@ int main(int argc, char *argv[]) {
     curs_set(0);
     refresh();
     
-    /* 
-    
     /* init random */
     srand((unsigned)time(NULL));
     
@@ -56,9 +23,20 @@ int main(int argc, char *argv[]) {
     Company * company = createCompany();
     refreshGlobalDisplay(company);
     DisplayWins * menu = createDisplayWins();
-    gameLoop(company);
+    
+    /* init vars */
+    BOOL isPause = FALSE;
+    InputThreadArgs * iTArgs = createInputThreadArgs(company,&isPause, menu);
+    
+    /* input thread */
+    pthread_t tid;
+    pthread_create(&tid,NULL, (void*)inputThread, (void *)iTArgs);
+    
+    /* main loop */
+    gameLoop(company, &isPause);
     
     
+    pthread_join(tid,NULL);
     endwin();
     return 0;
 }
