@@ -61,7 +61,8 @@ const GameType typeList[] = {
 #define LENWAYFINDLIST 4
 const WayToFind wayFindList[] = 
 {
-	{"
+	{"promoteWay",500},
+	{"magazineWay",2000},
 };
 
 #define LENWAYTRAIN 7

@@ -90,6 +90,7 @@ typedef struct Project
 	char * _platform;
 	char * _gametype;
 	char * _gametheme;
+	int _money;
     int _reward;
 	int _numBugs;
 	float _process;
@@ -124,6 +125,8 @@ typedef struct Company
 	Stuff * _stuffs[MAXSTUFFNUM];
     int _numStuff;
     Timer * _timer;
+	/*you can sell game for'sellDay'*/
+	int  _sellDay;
     /* if no ad now, _nowAd is 'null' */
     Ad * _nowAd;
     int _numResearch;

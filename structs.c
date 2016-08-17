@@ -113,7 +113,10 @@ void doProject(Company * company)
 
 void sellGame(Company * company)
 {
-    
+	increasemoney(company);
+	company->_sellDay = company->_sellDay - 1;
+	if ( company->_sellDay == 0)
+		company -> _isSellingGame = FALSE;
 }
 
 int fansNum(Ad * ad)
@@ -673,7 +676,10 @@ void startNewGame(DisplayWins * disWin,Company * company, int indexPlatform, int
 /* create a random project for choosing */
 Project * createRandomContractProject()
 {
-    
+   Project * p = ( Project * ) malloc ( sizeof ( Project ) );
+   p -> project ->_name = 'A' + rand()%26;
+   p -> project ->_money = rand()%1000+1000;
+   p -> project ->_reward = rand()%2000+1000;
 }
 
 void startContract(DisplayWins * menu, Company * company, Project * project)
