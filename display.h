@@ -80,13 +80,12 @@ void printChooseContractMenu(DisplayWins * disWin,Project * contractList, int le
     for ( ; i < len; ++ i )
     {
         Propertytwo tmpPt = contractList[i] . _property;
-        mvwprintw(disWin -> _mainWin, i + 1, 3, "%s,%s,%s,%s,\nreward:%d,timeLimit:%d\t(%d)",
+        mvwprintw(disWin -> _mainWin, i + 1, 3, "%s,%s,%s,%s,\nreward:%d,\t(%d)",
                   tmpPt._intrest,
                   tmpPt._uniquation,
                   tmpPt._eyes,
                   tmpPt._musics,
                   contractList[i] . _reward,
-                  contractList[i] . _timeLimit,
                   i + 1
                  );
     }

@@ -83,10 +83,32 @@ void checkTimeEvents(Company * company)
 }
 
 /* in-loop func
+ * just do the pj, ingnore process
  */
 void doProject(Company * company)
 {
-    if (  )
+    Project * nowPj = company -> _nowProject;
+    /* increase property */
+    for ( int i = 0; i < company -> _numStuff; ++ i )
+    {
+        Property sP = company -> _stuffs[i] -> _property;
+        nowPj -> _property . _intrest += ( (rand() % sP._writing) ) / (float)GAMETIME + 2;
+        nowPj -> _property . _uniquation += ( (rand() % sP._coding) ) / (float)GAMETIME + 2;
+        nowPj -> _property . _eyes += ( (rand() % sP._drawing) ) / (float)GAMETIME + 2;
+        nowPj -> _property . _musics +=( (rand() % sP._music) ) / (float)GAMETIME + 2;
+    }
+    /* if is game */
+    if ( nowPj -> _isGame)
+    {
+        /* add process */
+        nowPj -> _process += 1.0 / GAMETIME;
+        /* add bug */
+        int tmpNumBugs = rand() % 1 - 5;
+        if ( tmpNumBugs > 0 )
+        {
+            nowPj -> _numBugs += 1;
+        }
+    }
 }
 
 void sellGame(Company * company)
@@ -193,12 +215,31 @@ Project * createGameProject(char * name, char * platform, char * theme, char * t
     
     /* game has no reward nor timelimit */
     pj -> _reward = -1;
-    pj -> _timeLimit = -1;
     
     return pj;
 }
 
-void updateCompany(Company * company)
+void finishGame(DisplayWins * disWin,Company * company)
+{
+    company -> _isDoingProject = FALSE;
+    company -> _gameHistory[company -> _lenGameHistory] = company -> _nowProject;
+    company -> _nowProject = NULL;
+    company -> _isSellingGame = TRUE;
+    printInfo(disWin,"you have finished your new game, it'll be selling now");
+}
+
+
+void finishContract(DisplayWins * disWin,Company *  company)
+{
+    company -> _isDoingProject = FALSE;
+    company -> _money += company -> _nowProject -> _reward;
+    /* free memory */
+    free(company -> _nowProject);
+    company -> _nowProject = NULL;
+    printInfo(disWin,"you have finished a contract, reward have added to your company");
+}
+
+void updateCompany(DisplayWins * disWin,Company * company)
 {
     /* update timer */
     addDay(company -> _timer);
@@ -208,12 +249,12 @@ void updateCompany(Company * company)
     if ( company -> _isDoingProject )
     {
         doProject(company);
-        if ( company -> _process >= 100 )
+        if ( company -> _nowProject ->_process >= 100 )
         {
-            if ( company -> _nowProject. -> _isGame)
-                finishGame(company);
+            if ( company -> _nowProject -> _isGame)
+                finishGame(disWin,company);
             else
-                finishContract(company);
+                finishContract(disWin,company);
         }
     }
     /* sale */
@@ -224,12 +265,12 @@ void updateCompany(Company * company)
 }
 
 
-void gameLoop(Company * company, BOOL  * isPause)
+void gameLoop(DisplayWins * disWin,Company * company, BOOL  * isPause)
 {
     /*main loop*/
     while (TRUE)
     {
-        updateCompany(company);
+        updateCompany(disWin,company);
         updateDisplay(company);
         /* sleep */
         int counter = 0;

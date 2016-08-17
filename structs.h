@@ -21,13 +21,6 @@ typedef struct GamePlatform
     int _money;
 }GamePlatform;
 
-typedef struct WayToTrain
-{
-    char * _name;
-    int _money;
-    Property _property;
-}WayToTrain;
-
 typedef struct Timer
 {
     int _year;
@@ -44,6 +37,13 @@ typedef struct Property
 	int _drawing;
 	int _music;
 }Property;
+
+typedef struct WayToTrain
+{
+    char * _name;
+    int _money;
+    Property _property;
+}WayToTrain;
 
 typedef struct Propertytwo
 {
@@ -89,7 +89,6 @@ typedef struct Project
 	char * _platform;
 	char * _gametype;
 	char * _gametheme;
-    int _timeLimit;
     int _reward;
 	int _numBugs;
 	float _process;
