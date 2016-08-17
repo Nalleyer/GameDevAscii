@@ -1,5 +1,6 @@
 #ifndef _STRUCTS_C
 #define _STRUCTS_C
+
 #include "structs.h"
 #include "globalVars.h"
 #include "display.h"
@@ -7,9 +8,9 @@
     
 char * getRandomName()
 {
-    char * name[3];
-    name[0] = (char)(rand() % 26 + (int)'a');
-    name[1] = (char)(rand() % 26 + (int)'a');
+    char * name = (char *)malloc(3 * sizeof(char) );
+    name[0] = (char)(rand() % 25 + (int)'a');
+    name[1] = (char)(rand() % 25 + (int)'a');
     name[2] = (char)(rand() % 9 + (int)'0');
     return name;
 }
@@ -75,6 +76,7 @@ Company * createCompany()
     pCompany -> _isSellingGame = FALSE;
     /* first stuff */
     pCompany -> _numStuff = 1;
+    pCompany -> _nowAd = adList[0];
     Property tmpProperty = {10,10,10,10};
     pCompany -> _stuffs[0] = createStuff(getRandomName(),1, tmpProperty );
     return pCompany;
@@ -133,7 +135,7 @@ void doProject(Company * company)
 void sellGame(Company * company)
 {
 	increasemoney(company);
-	company->_sellDay = company->_sellDay - 1;
+	-- company->_sellDay ;
 	if ( company->_sellDay == 0)
 		company -> _isSellingGame = FALSE;
 }
@@ -192,32 +194,25 @@ int min(const Propertytwo * pt)
 	return b;
 }
 
-int moneyTheme(GameTheme * theme)
+int moneyTheme(int indexTheme)
 {
-	for ( int i = 0; i < LENTHEMELIST; ++ i )
-	{
-		if ( themeList[i]._themeName == theme -> _themeName )
-			return ( themeList[i]._money);
-	}
+    return themeList[indexTheme]. _money;
 }
 
-int moneyType(GameType * type)
+int moneyType(int indexType)
 {
-	for ( int j = 0; j < LENTYPELIST; ++ j )
-	{
-		if ( typeList[j]._typeName == type -> _typeName )
-			return ( typeList[j]._money);
-	}
+    return typeList[indexType] . _money;
 }
 
 void increasemoney( Company * company)
 {
+    Project * sellingPj = company -> _gameHistory[company -> _lenGameHistory - 1];
 	int x,y,z,sum,maxMoney,minMoney;
-	x = moneyAd( company -> _nowAd );
-	y = moneyTheme( company -> _nowProject -> _gametheme);
-	z = moneyType( company -> _nowProject ->  _gametype);
-	maxMoney = max(&(company -> _nowProject -> _property));
-	minMoney = min(&(company -> _nowProject -> _property));
+	x = company -> _nowAd . _money;
+	y = moneyTheme( sellingPj -> _indexTheme );
+	z = moneyType( sellingPj ->  _indexType );
+	maxMoney = max(&(sellingPj -> _property));
+	minMoney = min(&(sellingPj -> _property));
 	int fans = company -> _fans;
 	sum = x + y + z;
 	if(0<=sum<850)
@@ -550,18 +545,19 @@ void increasemoney( Company * company)
 /* create a game project
  * paras, all are char *,
  */
-Project * createGameProject(char * name, char * platform, char * theme, char * type)
+Project * createGameProject(char * name, int indexPlatform, int indexTheme, int indexType)
 {
     Project * pj = (Project *) malloc ( sizeof ( Project ) );
-    pj ->_platform = platform;
-    pj -> _gametheme = theme;
-    pj -> _gametype = type;
+    pj -> _indexPlatform = indexPlatform;
+    pj -> _indexTheme = indexTheme;
+    pj -> _indexTheme = indexType;
     pj -> _name = name;
     
     pj -> _numBugs = 0;
     pj -> _process = 0;
     pj -> _selledCopies = 0;
     
+    pj -> _process = 0;
     pj -> _isGame = TRUE;
     
     /* game has no reward nor timelimit */
@@ -613,11 +609,20 @@ void updateCompany(DisplayWins * disWin,Company * company)
     addDay(company -> _timer);
     checkTimeEvents(disWin,company);
     
+    /* stuff num */
+    if ( company -> _numStuff <= 0 )
+    {
+        printInfo(disWin, "you have no stuff! game over!");
+    }
+    
+    /* money */
+    checkBreak(disWin,company);
+    
     /* project */
     if ( company -> _isDoingProject )
     {
         doProject(company);
-        if ( company -> _nowProject ->_process >= 100 )
+        if ( company -> _nowProject ->_process >= 1.0 )
         {
             if ( company -> _nowProject -> _isGame)
             {
@@ -648,10 +653,13 @@ void gameLoop(DisplayWins * disWin,Company * company, BOOL  * isPause)
         updateDisplay(company);
         /* sleep */
         int counter = 0;
-        for (counter = 0; counter < 50; ++ counter)
+        for (counter = 0; counter < 500; ++ counter)
         {
-            while(* isPause);
-            usleep(10000);
+            while(* isPause)
+            {
+            }
+            //usleep(1000);
+            usleep(10);
         }
     }
 }
@@ -720,9 +728,9 @@ Project * createRandomContractProject()
    Project * p = ( Project * ) malloc ( sizeof ( Project ) );
    Propertytwo tmpProperty = { rand() % 100, rand() % 100, rand() % 100, rand() % 100 };
    p -> _property = tmpProperty;
-   p -> _name = 'A' + rand()%26;
+   p -> _name = getRandomName();
    p -> _money = rand()%1000+1000;
-   p -> _reward = rand()%2000+1000;
+   p -> _reward = rand()%1000+1000 + p -> _money;
    return p;
 }
 
@@ -742,9 +750,13 @@ void startContract(DisplayWins * menu, Company * company, Project * project)
     }
 }
 
-Stuff * createRandomStuff(int indexWay)
+Stuff * createRandomStuff(int indexWay)/*Stuff * createStuff(char * name, int salery, Property property)*/
 {
-    
+	char * name = getRandomName();
+	int salery = wayFindList[indexWay]._money + rand()%100+10;
+    int average = salery/40;
+	Property property = { rand()%7+(average-2), rand()%8+(average-2),rand()%5+(average-2) ,rand()%5+(average-2) };
+    return createStuff(name, salery, property);
 }
 
 void hire(DisplayWins * menu, Company * company, Stuff * stuff)
@@ -805,7 +817,15 @@ void useAd(DisplayWins * menu, Company * company, int indexAd)
  */
 BOOL makeAFind(Company * company, int indexWay)
 {
-    
+    if ( company -> _money >= wayFindList[indexWay] . _money )
+    {
+        company -> _money -= wayFindList[indexWay] . _money;
+        return TRUE;
+    }
+    else
+    {
+        return FALSE;
+    }
 }
 
 void freeOtherContracts(Project ** contractList,int tmpIndex)
@@ -836,6 +856,7 @@ void processMenu(DisplayWins * menu, char ** menuState, const Company * company)
         /* esc ignore state */
         if ( nowInput == 27 )
         {
+            clearMainMenu(menu);
             return;
         }
         mvprintw(21,20,"nowInput: got ch %c",nowInput);
@@ -1068,7 +1089,7 @@ void processMenu(DisplayWins * menu, char ** menuState, const Company * company)
             {
                 (* menuState) = "main_stuff";
                 clearMainMenu(menu);
-                printProjectMenu(menu);
+                printStuffMenu(menu);
                 continue;
             }
             int wayIndex = nowInput - '0' - 1;
@@ -1091,13 +1112,38 @@ void processMenu(DisplayWins * menu, char ** menuState, const Company * company)
         }
         else if ( (* menuState) == "main_stuff_hire_way" ) 
         {
+            if ( nowInput == 'b' )
+            {
+                (* menuState) = "main_stuff_hire";
+                clearMainMenu(menu);
+                printWayToFindMenu(menu);
+                continue;
+            }
             int newStuffIndex = nowInput - '0' - 1;
-            hire(menu,company,stuffList[newStuffIndex]);
+            if ( newStuffIndex >= 0 && newStuffIndex < NUMSTUFFCHOOSE )
+            {
+                clearMainMenu(menu);
+                hire(menu,company,stuffList[newStuffIndex]);
+                return;
+            }
         }
         else if ( (* menuState) == "main_stuff_fire" ) 
         {
+            if ( nowInput == 'b' )
+            {
+                (* menuState) = "main_stuff";
+                clearMainMenu(menu);
+                printStuffMenu(menu);
+                continue;
+            }
             int fireStuffIndex = nowInput - '0' - 1;
-            fire(menu,company,fireStuffIndex);
+            if ( fireStuffIndex >= 0 && fireStuffIndex < company -> _numStuff )
+            {
+                (* menuState) = "exit";
+                clearMainMenu(menu);
+                fire(menu,company,fireStuffIndex);
+                return;
+            }
         }
         else if ( (* menuState) == "main_stuff_train" ) 
         {

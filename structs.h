@@ -71,9 +71,9 @@ typedef struct Project
 {
     BOOL _isGame;
 	char * _name;
-	char * _platform;
-	char * _gametype;
-	char * _gametheme;
+    int _indexPlatform;
+    int _indexTheme;
+    int _indexType;
     /* if is a contract, it has money */
     int _money;
     int _reward;
@@ -113,7 +113,7 @@ typedef struct Company
 	/*you can sell game for'sellDay'*/
 	int  _sellDay;
     /* if no ad now, _nowAd is 'null' */
-    Ad * _nowAd;
+    Ad _nowAd;
     int _numResearch;
 	int _fans;
     int _money;

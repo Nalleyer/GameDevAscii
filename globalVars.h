@@ -59,7 +59,7 @@ const GameType typeList[] = {
 };
 
 //set to 4 temply
-#define LENWAYFINDLIST 4
+#define LENWAYFINDLIST 2
 const WayToFind wayFindList[] = 
 {
 	{"promoteWay",500},

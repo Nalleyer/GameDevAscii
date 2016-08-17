@@ -6,8 +6,6 @@
 
 
 #include <ncurses.h>
-#include "structs.h"
-#include "structs.c"
 #include "globalVars.h"
 
 WINDOW * createWin(int height, int width, int startX, int startY)
@@ -124,12 +122,34 @@ void printSystemMenu(DisplayWins * disWin)
 
 void printWayToFindMenu(DisplayWins * disWin)
 {
-    
+    int i = 0;
+    for ( ; i < LENWAYFINDLIST; ++ i )
+    {
+        mvwprintw(disWin -> _mainWin, i + 1, 3, "%s\tmoney:%d(%c)",
+                  wayFindList[i]._name,
+                  wayFindList[i]._money,
+                  '0' + i + 1);
+    }
+    mvwprintw(disWin -> _mainWin, i + 2, 3, "back(b)");
+    wrefresh(disWin -> _mainWin);
 }
 
-void printChooseStuffFireMenu(DisplayWins * diswin,Company * company)
+void printChooseStuffFireMenu(DisplayWins * disWin,Company * company)
 {
-    
+    int i = 0;
+    for ( ; i < company -> _numStuff; ++ i )
+    {
+        Stuff * s = company -> _stuffs[i];
+        mvwprintw(disWin -> _mainWin, i + 1, 3, "%s,coding:%d,writing:%d,drawing:%d,music:%d)(%c)",
+                  s -> _name,
+                  s -> _property ._coding,
+                  s -> _property . _writing,
+                  s -> _property . _drawing,
+                  s -> _property . _music,
+                  '0' + i + 1);
+    }
+    mvwprintw(disWin -> _mainWin, i + 2, 3, "back(b)");
+    wrefresh(disWin -> _mainWin);
 }
 
 
@@ -166,14 +186,14 @@ void printChooseStuffHireMenu(DisplayWins * disWin, Stuff ** stuffList)
     for (; i < NUMSTUFFCHOOSE; ++ i)
     {
         Stuff * s = stuffList[i];
-        mvwprintw(disWin -> _mainWin, i + 1, 3, "%s,(coding:%d,writing:%d,drawing:%d,music:%d)\tmoney:%d(%d)",
+        mvwprintw(disWin -> _mainWin, i + 1, 3, "%s,(coding:%d,writing:%d,drawing:%d,music:%d)\tmoney:%d(%c)",
             s -> _name,
             s -> _property ._coding,
             s -> _property._writing,
             s -> _property._drawing,
             s -> _property._music,
             s -> _salery,
-            i + 1
+            '0' + i + 1
         );
     }
     mvwprintw(disWin -> _mainWin, i + 2, 3, "back(b)");
@@ -264,23 +284,39 @@ void refreshGlobalDisplay(Company * company)
     if ( company -> _isDoingProject)
     {
         mvprintw(0,COLS / 2 - 15, "woking on: %s",
-            company -> _nowProject -> _name
-        );
-        mvprintw(1,COLS / 2 - 15, "bugs: %d",
-            company -> _nowProject -> _numBugs
+                     company -> _nowProject -> _name
         );
         mvprintw(2,COLS / 2 - 15, "research: %d",
-            company -> _numResearch
+                 company -> _numResearch
         );
-        mvprintw(3,COLS / 2 - 15, "process: %d",
-            company -> _nowProject -> _process
+        
+        /* property */
+        mvprintw(4, COLS - COLS / 4,"intrest: %d",
+                 company -> _nowProject -> _property . _intrest
         );
-        mvprintw(0, COLS - COLS / 4,"intrest: %s",
-            company -> _nowProject -> _property . _intrest
+        mvprintw(5, COLS - COLS / 4,"uniquation: %d",
+                 company -> _nowProject -> _property . _uniquation
         );
-        mvprintw(0, COLS - COLS / 4,"unic: %s",
-            company -> _nowProject -> _property . _uniquation
+        mvprintw(6, COLS - COLS / 4,"eyes: %d",
+                 company -> _nowProject -> _property . _eyes
         );
+        mvprintw(7, COLS - COLS / 4,"musics: %d",
+                 company -> _nowProject -> _property . _musics
+        );
+        
+        if ( company -> _nowProject -> _isGame )
+        {
+            mvprintw(1,COLS / 2 - 15, "bugs: %d",
+                     company -> _nowProject -> _numBugs
+            );
+            mvprintw(3,COLS / 2 - 15, "process: %.2f%%",
+                     company -> _nowProject -> _process * 100
+            );
+        }
+        else
+        {
+            
+        }
     }
     else
     {
