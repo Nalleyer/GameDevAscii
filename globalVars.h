@@ -61,13 +61,19 @@ const GameType typeList[] = {
 #define LENWAYFINDLIST 4
 const WayToFind wayFindList[] = 
 {
-    
+	{"
 };
 
 #define LENWAYTRAIN 7
 const WayToTrain wayTrainList[] = 
 {
     //{"book",300,{1,1,0.0}},
+	{"book",300,{1,1,0,0}},
+	{"walk",300,{0,0,1,1}},
+	{"playGame",600,{1,1,2,0}},
+	{"listen",300,{0,0,0,1}},
+	{"visit",600,{0,4,0,0}},
+	{"study",1500,{1,12,1,1}}
 };
 
 #endif
