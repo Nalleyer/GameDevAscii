@@ -71,6 +71,7 @@ Company * createCompany()
     pCompany -> _numResearch = 0;
     pCompany -> _fans = 0;
     pCompany -> _lenGameHistory = 0;
+    pCompany -> _isSellingGame = FALSE;
     /* first stuff */
     pCompany -> _numStuff = 1;
     pCompany -> _stuffs[0] = createStuff(getRandomName(),1, getRandomProperty(avarage));
@@ -85,6 +86,12 @@ void checkTimeEvents(Company * company)
  */
 void doProject(Company * company)
 {
+    if (  )
+}
+
+void sellGame(Company * company)
+{
+    
 }
 
 int fansNum(Ad * ad)
@@ -201,6 +208,18 @@ void updateCompany(Company * company)
     if ( company -> _isDoingProject )
     {
         doProject(company);
+        if ( company -> _process >= 100 )
+        {
+            if ( company -> _nowProject. -> _isGame)
+                finishGame(company);
+            else
+                finishContract(company);
+        }
+    }
+    /* sale */
+    if ( company -> _isSellingGame)
+    {
+        sellGame(company);
     }
 }
 

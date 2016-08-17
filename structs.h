@@ -21,7 +21,12 @@ typedef struct GamePlatform
     int _money;
 }GamePlatform;
 
-
+typedef struct WayToTrain
+{
+    char * _name;
+    int _money;
+    Property _property;
+}WayToTrain;
 
 typedef struct Timer
 {
@@ -87,7 +92,7 @@ typedef struct Project
     int _timeLimit;
     int _reward;
 	int _numBugs;
-	int _process;
+	float _process;
 	int _selledCopies;
     Propertytwo _property;
 }Project;
@@ -115,6 +120,7 @@ typedef struct Company
 {
 	BOOL _isDoingProject;
 	Project * _nowProject;
+    BOOL _isSellingGame;
 	Stuff * _stuffs[MAXSTUFFNUM];
     int _numStuff;
     Timer * _timer;

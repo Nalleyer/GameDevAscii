@@ -9,6 +9,7 @@
 #define NUMSTUFFCHOOSE 3
 
 #define LENPLATFORMLIST 4
+#define GAMETIME 140
 
 const GamePlatform platformlist[] = {
     {"PC",100},
@@ -59,6 +60,12 @@ const GameType typeList[] = {
 const WayToFind wayFindList[] = 
 {
     
+};
+
+#define LENWAYTRAIN 7
+const WayToTrain wayTrainList[] = 
+{
+    //{"book",300,{1,1,0.0}},
 };
 
 #endif
