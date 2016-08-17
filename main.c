@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
     pthread_create(&tid,NULL, (void*)inputThread, (void *)iTArgs);
     
     /* main loop */
-    gameLoop(company, &isPause);
+    gameLoop(menu,company, &isPause);
     
     
     pthread_join(tid,NULL);
